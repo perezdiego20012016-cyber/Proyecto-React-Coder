@@ -1,0 +1,23 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 16px 32px;
+  background-color: #026280;
+  color: white;
+}
+
+.logo {
+  font-size: 1.5rem;
+}
+
+.categories {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+}
+
+.categories li {
+  cursor: pointer;
+}
