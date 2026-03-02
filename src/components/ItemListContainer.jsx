@@ -10,39 +10,48 @@ import {
   Grid,
 } from "@mui/material";
 
+const API_URL = "https://69a5da9c885dcb6bd6a97ba6.mockapi.io/tiendadedulces/v1/Productos";
+
 function ItemListContainer() {
   const { categoryId } = useParams();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const categoryMap = {
+    acidos: "Acidos",
+    chocolates: "Chocolates",
+    paletas: "Paletas",
+  };
+
   useEffect(() => {
     setLoading(true);
 
-    // 🔹 Reemplaza esta URL con tu API real si tenés otra
-    fetch("https://fakestoreapi.com/products")
-      .then((res) => res.json())
+    fetch(API_URL)
+      .then((res) => {
+        if (!res.ok) throw new Error("Error cargando productos");
+        return res.json();
+      })
       .then((data) => {
-        // Filtrar por categoría si existe
+        const arrayData = Array.isArray(data) ? data : [];
+
         const filtered = categoryId
-          ? data.filter((item) => item.category === categoryId)
-          : data;
+          ? arrayData.filter((item) =>
+              item.Category === (categoryMap[categoryId] || categoryId)
+            )
+          : arrayData;
 
         setItems(filtered);
         setLoading(false);
       })
       .catch((err) => {
         console.error("Error cargando productos:", err);
+        setItems([]);
         setLoading(false);
       });
   }, [categoryId]);
 
-  if (loading) {
-    return <h2>Cargando productos...</h2>;
-  }
-
-  if (items.length === 0) {
-    return <h2>No hay productos en esta categoría</h2>;
-  }
+  if (loading) return <h2>Cargando productos...</h2>;
+  if (items.length === 0) return <h2>No hay productos en esta categoría</h2>;
 
   return (
     <Grid container spacing={3} justifyContent="center">
@@ -59,15 +68,13 @@ function ItemListContainer() {
           >
             <CardContent sx={{ flexGrow: 1 }}>
               <Typography gutterBottom variant="h6">
-                {item.title || item.name} {/* Depende de la API */}
+                {item.Name}
               </Typography>
-
               <Typography variant="body2" color="text.secondary">
-                Categoría: {item.category}
+                Categoría: {item.Category}
               </Typography>
-
               <Typography variant="body1" sx={{ mt: 1 }}>
-                ${item.price}
+                ${item.Price.toFixed(2)}
               </Typography>
             </CardContent>
 

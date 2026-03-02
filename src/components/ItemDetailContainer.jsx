@@ -1,18 +1,12 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Card, CardContent, Typography, Button, Box } from "@mui/material";
+import { useParams, Link } from "react-router-dom";
+import { Card, CardContent, Typography, Button, Box, CardActions } from "@mui/material";
 
-// Componente contador simple
 function ItemCount({ stock = 10, initial = 1, onAdd }) {
   const [count, setCount] = useState(initial);
 
-  const handleIncrement = () => {
-    if (count < stock) setCount(count + 1);
-  };
-
-  const handleDecrement = () => {
-    if (count > 1) setCount(count - 1);
-  };
+  const handleIncrement = () => { if (count < stock) setCount(count + 1); };
+  const handleDecrement = () => { if (count > 1) setCount(count - 1); };
 
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 2 }}>
@@ -28,46 +22,43 @@ function ItemDetailContainer() {
   const { itemId } = useParams();
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
+  const API_URL = "https://69a5da9c885dcb6bd6a97ba6.mockapi.io/tiendadedulces/v1/Productos";
 
   useEffect(() => {
     setLoading(true);
 
-    // 🔹 Reemplaza la URL con tu API real si tenés otra
-    fetch(`https://fakestoreapi.com/products/${itemId}`)
+    fetch(`${API_URL}/${itemId}`)
       .then((res) => res.json())
-      .then((data) => {
-        setItem(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error cargando producto:", err);
-        setItem(null);
-        setLoading(false);
-      });
+      .then((data) => { setItem(data); setLoading(false); })
+      .catch((err) => { console.error("Error cargando producto:", err); setItem(null); setLoading(false); });
   }, [itemId]);
 
   const handleAddToCart = (quantity) => {
-    alert(`Agregaste ${quantity} unidad(es) de ${item?.title || item?.name} al carrito`);
-    // Aquí luego podrías conectar con un contexto de carrito
+    alert(`Agregaste ${quantity} unidad(es) de ${item?.Name} al carrito`);
   };
 
-  if (loading) return <h2>Cargando detalle...</h2>;
+  if (loading) return <h2>Cargando producto...</h2>;
   if (!item) return <h2>Producto no encontrado</h2>;
 
   return (
     <Card sx={{ maxWidth: 400, margin: "0 auto", mt: 4 }}>
       <CardContent>
-        <Typography variant="h5">{item.title || item.name}</Typography>
+        <Typography variant="h5">{item.Name}</Typography>
         <Typography variant="body2" sx={{ mt: 1 }}>
-          Categoría: {item.category}
+          Categoría: {item.Category}
         </Typography>
         <Typography variant="h6" sx={{ mt: 2 }}>
-          ${item.price}
+          ${item.Price.toFixed(2)}
         </Typography>
 
-        {/* Contador dentro del detalle */}
         <ItemCount onAdd={handleAddToCart} />
       </CardContent>
+
+      <CardActions>
+        <Button variant="contained" component={Link} to="/" fullWidth>
+          Volver al listado
+        </Button>
+      </CardActions>
     </Card>
   );
 }

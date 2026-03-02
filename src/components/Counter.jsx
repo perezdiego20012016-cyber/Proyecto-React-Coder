@@ -1,8 +1,7 @@
 import Button from "./Button"
 import { useState } from "react"
 
-function Counter() {
-    // let count   
+function Counter() {  
     const [count, setCount] = useState(0)
     return (
         <div>
