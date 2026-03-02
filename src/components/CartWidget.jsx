@@ -1,11 +1,12 @@
 import "./CartWidget.css";
+import { Link } from "react-router-dom";
 
 function CartWidget() {
   return (
-    <div className="cart">
+    <Link to="/cart" className="cart">
       🛒
       <span className="badge">3</span>
-    </div>
+    </Link>
   );
 }
 

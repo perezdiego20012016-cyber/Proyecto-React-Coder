@@ -21,3 +21,7 @@
 .categories li {
   cursor: pointer;
 }
+
+.categories-button {
+  background-color: blueviolet;
+}

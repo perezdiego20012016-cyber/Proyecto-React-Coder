@@ -1,21 +1,36 @@
-import styles from './App.module.css'
-import Button from './components/Button.jsx'
-import Counter from './components/Counter.jsx'
+import AppRouter from './router/AppRouter.jsx';
+import { ThemeProvider, createTheme, CssBaseline, Box } from '@mui/material';
 
-
-
-import NavBar from "./components/NavBar";
-import ItemListContainer from "./components/ItemListContainer";
+const theme = createTheme({
+  palette: {
+    mode: 'light', // cambia a 'dark' si quieres modo oscuro
+    primary: {
+      main: '#1976d2',
+    },
+    secondary: {
+      main: '#9c27b0',
+    },
+  },
+  typography: {
+    fontFamily: 'Roboto, sans-serif',
+  },
+});
 
 function App() {
   return (
-    <>
-      <NavBar />
-      <ItemListContainer texto="Bienvenido a mi tienda de Golosinas" />
-    </>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+
+      {/* Contenedor global con padding */}
+      <Box sx={{ p: 3 }}>
+        <AppRouter />
+      </Box>
+
+    </ThemeProvider>
   );
 }
 
+export default App;
 
 
 
@@ -46,41 +61,4 @@ function App() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-// function App() {
-//   return (
-
-//     <div>
-//       <Button label={'esto viene por props'}
-
-//         styles={{ backgroundColor: 'Blue', color: 'Pink', padding: 10, borderRadius: 10, marginTop: 20, marginLeft: 20 }}
-//         handleClick={() => alert('Click')}
-//       >
-//         El texto que yo quiera
-//       </Button>
-
-//     </div>
-//   )
-// }
-
-
-// JSX -> JavaScript and XML o lenguaje marcado
-
-//REGLAS:
-
-// los componentes solo pueden retornar un solo elemento , se envuelven siempre en un div o un <>
-// Todas las etiquetas debene tener su cierre. en etiquetas de imagen se debe autocerrar />
-
-
-//Hooks . sirve para declarar, manejar y crear estados.
-export default App
 
