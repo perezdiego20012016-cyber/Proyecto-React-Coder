@@ -5,6 +5,7 @@ import {
   Card,
   CardContent,
   CardActions,
+  CardMedia,
   Button,
   Typography,
   Grid,
@@ -59,26 +60,43 @@ function ItemListContainer() {
         <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
           <Card
             sx={{
-              height: 300,
+              height: 400,
               display: "flex",
               flexDirection: "column",
+              alignItems: "center",
               transition: "0.3s",
               "&:hover": { transform: "scale(1.03)", boxShadow: 6 },
             }}
           >
-            <CardContent sx={{ flexGrow: 1 }}>
-              <Typography gutterBottom variant="h6">
+            <CardMedia
+              component="img"
+              image={
+                item.Image && item.Image.startsWith("/images/")
+                  ? item.Image
+                  : "/images/placeholder.png"
+              }
+              alt={item.Name}
+              sx={{
+                width: 250,      
+                height: 180,       
+                objectFit: "cover",
+                marginTop: 2       
+              }}
+            />
+
+            <CardContent sx={{ flexGrow: 1, width: "100%" }}>
+              <Typography gutterBottom variant="h6" align="center">
                 {item.Name}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="text.secondary" align="center">
                 Categoría: {item.Category}
               </Typography>
-              <Typography variant="body1" sx={{ mt: 1 }}>
+              <Typography variant="body1" sx={{ mt: 1 }} align="center">
                 ${item.Price.toFixed(2)}
               </Typography>
             </CardContent>
 
-            <CardActions>
+            <CardActions sx={{ width: "100%" }}>
               <Button
                 size="small"
                 variant="contained"
