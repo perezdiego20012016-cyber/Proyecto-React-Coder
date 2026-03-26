@@ -1,4 +1,5 @@
 import "./ItemListContainer.css";
+import { getProducts } from "../firebase/db";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
@@ -10,8 +11,6 @@ import {
   Typography,
   Grid,
 } from "@mui/material";
-
-const API_URL = "https://69a5da9c885dcb6bd6a97ba6.mockapi.io/tiendadedulces/v1/Productos";
 
 function ItemListContainer() {
   const { categoryId } = useParams();
@@ -27,19 +26,14 @@ function ItemListContainer() {
   useEffect(() => {
     setLoading(true);
 
-    fetch(API_URL)
-      .then((res) => {
-        if (!res.ok) throw new Error("Error cargando productos");
-        return res.json();
-      })
+    getProducts()
       .then((data) => {
-        const arrayData = Array.isArray(data) ? data : [];
-
         const filtered = categoryId
-          ? arrayData.filter((item) =>
-              item.Category === (categoryMap[categoryId] || categoryId)
+          ? data.filter(
+              (item) =>
+                item.Category === (categoryMap[categoryId] || categoryId)
             )
-          : arrayData;
+          : data;
 
         setItems(filtered);
         setLoading(false);
@@ -68,19 +62,16 @@ function ItemListContainer() {
               "&:hover": { transform: "scale(1.03)", boxShadow: 6 },
             }}
           >
+            {/* 🔥 IMAGEN DESDE FIRESTORE */}
             <CardMedia
               component="img"
-              image={
-                item.Image && item.Image.startsWith("/images/")
-                  ? item.Image
-                  : "/images/placeholder.png"
-              }
+              image={item.Image || "/images/placeholder.png"}
               alt={item.Name}
               sx={{
-                width: 250,      
-                height: 180,       
+                width: 250,
+                height: 180,
                 objectFit: "cover",
-                marginTop: 2       
+                marginTop: 2,
               }}
             />
 
@@ -88,11 +79,13 @@ function ItemListContainer() {
               <Typography gutterBottom variant="h6" align="center">
                 {item.Name}
               </Typography>
+
               <Typography variant="body2" color="text.secondary" align="center">
                 Categoría: {item.Category}
               </Typography>
+
               <Typography variant="body1" sx={{ mt: 1 }} align="center">
-                ${item.Price.toFixed(2)}
+                ${item.Price}
               </Typography>
             </CardContent>
 

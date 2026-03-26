@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Card, CardContent, Typography, Button, Box, CardActions } from "@mui/material";
+import { Card, CardContent, Typography, Button, Box, CardActions, CardMedia } from "@mui/material";
+import { getProducts } from "../firebase/db";
+import { useCart } from "../context/CartContext";
 
 function ItemCount({ stock = 10, initial = 1, onAdd }) {
   const [count, setCount] = useState(initial);
@@ -20,21 +22,31 @@ function ItemCount({ stock = 10, initial = 1, onAdd }) {
 
 function ItemDetailContainer() {
   const { itemId } = useParams();
+  const { addItem } = useCart();
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
-  const API_URL = "https://69a5da9c885dcb6bd6a97ba6.mockapi.io/tiendadedulces/v1/Productos";
 
   useEffect(() => {
     setLoading(true);
 
-    fetch(`${API_URL}/${itemId}`)
-      .then((res) => res.json())
-      .then((data) => { setItem(data); setLoading(false); })
-      .catch((err) => { console.error("Error cargando producto:", err); setItem(null); setLoading(false); });
+    getProducts()
+      .then((products) => {
+        const productoEncontrado = products.find(p => p.id === itemId);
+        setItem(productoEncontrado);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error cargando producto:", err);
+        setItem(null);
+        setLoading(false);
+      });
+
   }, [itemId]);
 
+  // 🔥 SOLUCIÓN 1
   const handleAddToCart = (quantity) => {
-    alert(`Agregaste ${quantity} unidad(es) de ${item?.Name} al carrito`);
+    if (!item) return; // evita undefined
+    addItem(item, quantity);
   };
 
   if (loading) return <h2>Cargando producto...</h2>;
@@ -42,13 +54,27 @@ function ItemDetailContainer() {
 
   return (
     <Card sx={{ maxWidth: 400, margin: "0 auto", mt: 4 }}>
+
+      <CardMedia
+        component="img"
+        image={item.Image || "/images/placeholder.png"}
+        alt={item.Name}
+        sx={{ height: 250, objectFit: "cover" }}
+      />
+
       <CardContent>
         <Typography variant="h5">{item.Name}</Typography>
+
         <Typography variant="body2" sx={{ mt: 1 }}>
           Categoría: {item.Category}
         </Typography>
+
+        <Typography variant="body2" sx={{ mt: 1 }}>
+          {item.Description}
+        </Typography>
+
         <Typography variant="h6" sx={{ mt: 2 }}>
-          ${item.Price.toFixed(2)}
+          ${item.Price}
         </Typography>
 
         <ItemCount onAdd={handleAddToCart} />
