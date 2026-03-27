@@ -9,7 +9,6 @@ const ItemListContainer = lazy(() => import("../components/ItemListContainer"));
 const ItemDetailContainer = lazy(() => import("../components/ItemDetailContainer"));
 const CartContainer = lazy(() => import("../components/CartContainer"));
 const Checkout = lazy(() => import("../components/Checkout"));
-
 function AppRouter() {
   return (
     <CartProvider>
