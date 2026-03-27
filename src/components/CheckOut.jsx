@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TextField, Button, Typography, Box, Paper } from "@mui/material";
 import { useCart } from "../context/CartContext";
 import { createOrder } from "../firebase/db";
+import { useNavigate } from "react-router-dom";
+import CandyLoader from "../components/CandyLoader"; // 
 
 function Checkout() {
   const { cart, getTotalPrice, clearCart } = useCart();
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     name: "",
@@ -13,6 +16,7 @@ function Checkout() {
   });
 
   const [orderId, setOrderId] = useState(null);
+  const [loadingOrder, setLoadingOrder] = useState(false); // 
 
   const handleChange = (e) => {
     setForm({
@@ -31,16 +35,32 @@ function Checkout() {
       date: new Date()
     };
 
+    setLoadingOrder(true);
+
     try {
       const id = await createOrder(order);
       setOrderId(id);
       clearCart();
     } catch (error) {
       console.error("Error creando orden:", error);
+    } finally {
+      setLoadingOrder(false);
     }
   };
 
-  // 🔥 SI YA COMPRÓ
+  // 👇 REDIRECCIÓN AUTOMÁTICA
+  useEffect(() => {
+    if (orderId) {
+      const timer = setTimeout(() => {
+        navigate("/");
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [orderId, navigate]);
+
+  if (loadingOrder) return <CandyLoader />;
+
   if (orderId) {
     return (
       <Typography variant="h5" align="center" sx={{ mt: 5 }}>

@@ -11,6 +11,7 @@ import {
   Typography,
   Grid,
 } from "@mui/material";
+import CandyLoader from "../components/CandyLoader";
 
 function ItemListContainer() {
   const { categoryId } = useParams();
@@ -45,7 +46,8 @@ function ItemListContainer() {
       });
   }, [categoryId]);
 
-  if (loading) return <h2>Cargando productos...</h2>;
+  if (loading) return <CandyLoader />;
+
   if (items.length === 0) return <h2>No hay productos en esta categoría</h2>;
 
   return (
@@ -62,7 +64,6 @@ function ItemListContainer() {
               "&:hover": { transform: "scale(1.03)", boxShadow: 6 },
             }}
           >
-            {/* 🔥 IMAGEN DESDE FIRESTORE */}
             <CardMedia
               component="img"
               image={item.Image || "/images/placeholder.png"}

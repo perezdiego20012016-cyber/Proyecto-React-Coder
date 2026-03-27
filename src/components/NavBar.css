@@ -7,9 +7,19 @@
   background-color: #026280;
   color: white;
 }
-
 .logo {
-  font-size: 1.5rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  transition: 0.3s;
+}
+
+.logo:hover {
+  opacity: 0.8;
 }
 
 .categories {

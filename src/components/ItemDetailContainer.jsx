@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { Card, CardContent, Typography, Button, Box, CardActions, CardMedia } from "@mui/material";
 import { getProducts } from "../firebase/db";
 import { useCart } from "../context/CartContext";
+import toast from "react-hot-toast";
+import CandyLoader from "../components/CandyLoader"; 
 
 function ItemCount({ stock = 10, initial = 1, onAdd }) {
   const [count, setCount] = useState(initial);
@@ -43,13 +45,15 @@ function ItemDetailContainer() {
 
   }, [itemId]);
 
-  // 🔥 SOLUCIÓN 1
   const handleAddToCart = (quantity) => {
-    if (!item) return; // evita undefined
+    if (!item) return;
     addItem(item, quantity);
+
+    toast.success(`${item.Name} agregado al carrito 🛒`);
   };
 
-  if (loading) return <h2>Cargando producto...</h2>;
+  if (loading) return <CandyLoader />;
+
   if (!item) return <h2>Producto no encontrado</h2>;
 
   return (

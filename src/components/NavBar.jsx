@@ -13,7 +13,7 @@ function NavBar() {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="logo">Golosineria</Link>
+      <Link to="/" className="logo">golosineria</Link>
 
       <div>
         <Button
@@ -27,15 +27,22 @@ function NavBar() {
         >
           Categorías
         </Button>
+
         <Menu
           id="categories-menu"
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
         >
-          <MenuItem component={Link} to="/category/acidos" onClick={handleClose}>Acidos</MenuItem>
-          <MenuItem component={Link} to="/category/chocolates" onClick={handleClose}>Chocolates</MenuItem>
-          <MenuItem component={Link} to="/category/paletas" onClick={handleClose}>Paletas</MenuItem>
+          <MenuItem component={Link} to="/category/acidos" onClick={handleClose}>
+            Acidos
+          </MenuItem>
+          <MenuItem component={Link} to="/category/chocolates" onClick={handleClose}>
+            Chocolates
+          </MenuItem>
+          <MenuItem component={Link} to="/category/paletas" onClick={handleClose}>
+            Paletas
+          </MenuItem>
         </Menu>
       </div>
 
