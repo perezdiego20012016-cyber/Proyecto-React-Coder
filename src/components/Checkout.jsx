@@ -3,7 +3,7 @@ import { TextField, Button, Typography, Box, Paper } from "@mui/material";
 import { useCart } from "../context/CartContext";
 import { createOrder } from "../firebase/db";
 import { useNavigate } from "react-router-dom";
-import CandyLoader from "../components/CandyLoader"; // 
+import CandyLoader from "./CandyLoader"; // 
 
 function Checkout() {
   const { cart, getTotalPrice, clearCart } = useCart();
